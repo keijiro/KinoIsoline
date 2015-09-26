@@ -4,7 +4,9 @@ KinoIsoline
 KinoIsoline is an isoline (contour line) image effect for Unity.
 
 ![screenshot](http://40.media.tumblr.com/fa3203f1a513d28a2089ee88d1d40ed8/tumblr_nv8kv6Dk9c1qio469o1_400.png)
+
 ![gif](http://33.media.tumblr.com/c500e8004c55b2292f3964381572d54d/tumblr_nva7l4RAcQ1qio469o1_400.gif)
+![gif](http://38.media.tumblr.com/e2abb5071a65987b631637ddcdbdc620/tumblr_nvaekweork1qio469o1_400.gif)
 
 License
 -------
