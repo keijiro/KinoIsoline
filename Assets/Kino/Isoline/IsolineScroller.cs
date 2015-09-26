@@ -50,8 +50,8 @@ namespace Kino
         void Update()
         {
             var target = GetComponent<Isoline>();
-            _time += _speed * Time.deltaTime;
-            target.offset = _direction.normalized *  _time;
+            var delta = _direction.normalized * _speed * Time.deltaTime;
+            target.offset += delta;
         }
     }
 }

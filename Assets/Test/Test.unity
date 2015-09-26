@@ -2241,12 +2241,12 @@ GameObject:
   - 81: {fileID: 1739281010}
   - 114: {fileID: 1739281015}
   - 114: {fileID: 1739281020}
-  - 114: {fileID: 1739281019}
   - 114: {fileID: 1739281018}
   - 114: {fileID: 1739281017}
   - 114: {fileID: 1739281016}
   - 114: {fileID: 1739281022}
   - 114: {fileID: 1739281021}
+  - 95: {fileID: 1739281019}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2393,20 +2393,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _falloff: .5
   _shader: {fileID: 4800000, guid: 89a223cbeee1935419811f8736c0a9b3, type: 3}
---- !u!114 &1739281019
-MonoBehaviour:
+--- !u!95 &1739281019
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1739281009}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39f2dee2746e9455f99edbe58cee817d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _minAmplitude: .100000001
-  _maxAmplitude: .600000024
-  _frequency: .200000003
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 0cda4a370bf6c4f168cafe89cb25d1c9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &1739281020
 MonoBehaviour:
   m_ObjectHideFlags: 0
