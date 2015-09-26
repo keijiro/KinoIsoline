@@ -224,8 +224,12 @@ namespace Kino
             else if (_modulationMode == ModulationMode.Noise)
                 _material.EnableKeyword("MODULATION_NOISE");
 
+            var modFreq = _modulationFrequency;
+            if (_modulationMode == ModulationMode.Sin)
+                modFreq *= Mathf.PI * 2;
+
             _material.SetVector("_ModAxis", _modulationAxis.normalized);
-            _material.SetFloat("_ModFreq", _modulationFrequency);
+            _material.SetFloat("_ModFreq", modFreq);
             _material.SetFloat("_ModTime", _modulationTime);
             _material.SetFloat("_ModExp", _modulationExponent);
 

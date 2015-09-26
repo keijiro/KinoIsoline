@@ -128,7 +128,7 @@ Shader "Hidden/Kino/Isoline"
         #if MODULATION_FRAC
         g *= pow(frac(mp), _ModExp);
         #else // MODULATION_SIN
-        g *= pow(sin(mp), _ModExp);
+        g *= pow((sin(mp) + 1) / 2, _ModExp);
         #endif
         #endif
 
