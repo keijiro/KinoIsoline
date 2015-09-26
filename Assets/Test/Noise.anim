@@ -35,7 +35,7 @@ AnimationClip:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-    attribute: _noiseAmplitude
+    attribute: _distortionAmount
     path: 
     classID: 114
     script: {fileID: 11500000, guid: 1bd9623f651504dedb56bf70950956bf, type: 3}
@@ -92,7 +92,7 @@ AnimationClip:
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-    attribute: _noiseAmplitude
+    attribute: _distortionAmount
     path: 
     classID: 114
     script: {fileID: 11500000, guid: 1bd9623f651504dedb56bf70950956bf, type: 3}

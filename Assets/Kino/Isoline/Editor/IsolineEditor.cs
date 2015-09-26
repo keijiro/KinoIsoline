@@ -31,55 +31,85 @@ namespace Kino
     {
         SerializedProperty _lineColor;
         SerializedProperty _luminanceBlending;
+        SerializedProperty _fallOffDepth;
         SerializedProperty _backgroundColor;
 
         SerializedProperty _axis;
         SerializedProperty _interval;
         SerializedProperty _offset;
 
-        SerializedProperty _noiseFrequency;
-        SerializedProperty _noiseAmplitude;
+        SerializedProperty _distortionFrequency;
+        SerializedProperty _distortionAmount;
 
-        SerializedProperty _fallOffDepth;
+        SerializedProperty _modulationMode;
+        SerializedProperty _modulationAxis;
+        SerializedProperty _modulationFrequency;
+        SerializedProperty _modulationSpeed;
+        SerializedProperty _modulationExponent;
+
+        static GUIContent _textAmount    = new GUIContent("Amount");
+        static GUIContent _textAxis      = new GUIContent("Axis");
+        static GUIContent _textExponent  = new GUIContent("Exponent");
+        static GUIContent _textFrequency = new GUIContent("Frequency");
+        static GUIContent _textMode      = new GUIContent("Mode");
+        static GUIContent _textSpeed     = new GUIContent("Speed");
 
         void OnEnable()
         {
             _lineColor         = serializedObject.FindProperty("_lineColor");
             _luminanceBlending = serializedObject.FindProperty("_luminanceBlending");
+            _fallOffDepth      = serializedObject.FindProperty("_fallOffDepth");
             _backgroundColor   = serializedObject.FindProperty("_backgroundColor");
 
             _axis     = serializedObject.FindProperty("_axis");
             _interval = serializedObject.FindProperty("_interval");
             _offset   = serializedObject.FindProperty("_offset");
 
-            _noiseFrequency = serializedObject.FindProperty("_noiseFrequency");
-            _noiseAmplitude = serializedObject.FindProperty("_noiseAmplitude");
+            _distortionFrequency = serializedObject.FindProperty("_distortionFrequency");
+            _distortionAmount    = serializedObject.FindProperty("_distortionAmount");
 
-            _fallOffDepth = serializedObject.FindProperty("_fallOffDepth");
+            _modulationMode      = serializedObject.FindProperty("_modulationMode");
+            _modulationAxis      = serializedObject.FindProperty("_modulationAxis");
+            _modulationFrequency = serializedObject.FindProperty("_modulationFrequency");
+            _modulationSpeed     = serializedObject.FindProperty("_modulationSpeed");
+            _modulationExponent  = serializedObject.FindProperty("_modulationExponent");
         }
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
+            EditorGUILayout.LabelField("Color", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_lineColor);
             EditorGUILayout.PropertyField(_luminanceBlending);
+            EditorGUILayout.PropertyField(_fallOffDepth);
             EditorGUILayout.PropertyField(_backgroundColor);
 
             EditorGUILayout.Space();
 
+            EditorGUILayout.LabelField("Potential Function", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(_axis);
             EditorGUILayout.PropertyField(_interval);
             EditorGUILayout.PropertyField(_offset);
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.PropertyField(_noiseFrequency);
-            EditorGUILayout.PropertyField(_noiseAmplitude);
+            EditorGUILayout.LabelField("Distortion", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_distortionFrequency, _textFrequency);
+            EditorGUILayout.PropertyField(_distortionAmount, _textAmount);
 
             EditorGUILayout.Space();
 
-            EditorGUILayout.PropertyField(_fallOffDepth);
+            EditorGUILayout.LabelField("Modulation", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(_modulationMode, _textMode);
+
+            if (_modulationMode.hasMultipleDifferentValues || _modulationMode.intValue > 0)
+            {
+                EditorGUILayout.PropertyField(_modulationAxis, _textAxis);
+                EditorGUILayout.PropertyField(_modulationFrequency, _textFrequency);
+                EditorGUILayout.PropertyField(_modulationSpeed, _textSpeed);
+                EditorGUILayout.PropertyField(_modulationExponent, _textExponent);
+            }
 
             serializedObject.ApplyModifiedProperties();
         }

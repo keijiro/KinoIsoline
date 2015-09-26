@@ -32,13 +32,14 @@ Shader "Hidden/Kino/Isoline"
 
     CGINCLUDE
 
-    #pragma multi_compile _ NOISE_ON
+    #pragma multi_compile _ DISTORTION
+    #pragma multi_compile _ MODULATION_FRAC MODULATION_SIN MODULATION_NOISE
 
     #include "UnityCG.cginc"
 
-    //#if NOISE_ON
+    #if DISTORTION || MODULATION_NOISE
     #include "ClassicNoise3D.cginc"
-    //#endif
+    #endif
 
     sampler2D _MainTex;
     float2 _MainTex_TexelSize;
@@ -48,23 +49,27 @@ Shader "Hidden/Kino/Isoline"
     float4x4 _InverseView;
 
     half4 _Color;
-    half4 _BgColor;
     half _Blend;
+    float _FallOffDepth;
+    half4 _BgColor;
 
     float3 _Axis;
     float _Density;
     float3 _Offset;
 
-    float _NoiseFreq;
-    float _NoiseAmp;
+    float _DistFreq;
+    float _DistAmp;
 
-    float _FallOffDepth;
+    float3 _ModAxis;
+    float _ModFreq;
+    float _ModTime;
+    float _ModExp;
 
     float GetPotential(float3 wpos)
     {
         wpos += _Offset;
-        #if NOISE_ON
-        wpos += cnoise(wpos * _NoiseFreq) * _NoiseAmp;
+        #if DISTORTION
+        wpos += cnoise(wpos * _DistFreq) * _DistAmp;
         #endif
         return dot(wpos, _Axis) * _Density;
     }
@@ -113,6 +118,19 @@ Shader "Hidden/Kino/Isoline"
         float3 g2 = frac(p3) - frac(p2);
         float g = dot(g1, g1) + dot(g2, g2) > 1.4;
         g *= saturate(1.0 - abs(p1 - p0) - abs(p3 - p2));
+
+        // line modulation
+        #if MODULATION_NOISE
+        float mp = cnoise((wp0 - _ModAxis * _ModTime) * _ModFreq);
+        g *= pow(saturate(0.5 + mp), _ModExp);
+        #elif MODULATION_FRAC || MODULATION_SIN
+        float mp = (dot(wp0, _ModAxis) - _ModTime) * _ModFreq;
+        #if MODULATION_FRAC
+        g *= pow(frac(mp), _ModExp);
+        #else // MODULATION_SIN
+        g *= pow(sin(mp), _ModExp);
+        #endif
+        #endif
 
         // blending
         half4 cs = tex2D(_MainTex, i.uv);

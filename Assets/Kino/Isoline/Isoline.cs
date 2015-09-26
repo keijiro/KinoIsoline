@@ -50,6 +50,15 @@ namespace Kino
             set { _luminanceBlending = value; }
         }
 
+        // Depth fall-off
+        [SerializeField]
+        float _fallOffDepth = 40;
+
+        public float fallOffDepth {
+            get { return _fallOffDepth; }
+            set { _fallOffDepth = value; }
+        }
+
         // Background color
         [SerializeField]
         Color _backgroundColor = Color.black;
@@ -86,31 +95,71 @@ namespace Kino
             set { _offset = value; }
         }
 
-        // Noise frequency
+        // Distortion frequency
         [SerializeField]
-        float _noiseFrequency = 1;
+        float _distortionFrequency = 1;
 
-        public float noiseFrequency {
-            get { return _noiseFrequency; }
-            set { _noiseFrequency = value; }
+        public float distortionFrequency {
+            get { return _distortionFrequency; }
+            set { _distortionFrequency = value; }
         }
 
-        // Noise amplitude
+        // Distortion amount
         [SerializeField]
-        float _noiseAmplitude = 0;
+        float _distortionAmount = 0;
 
-        public float noiseAmplitude {
-            get { return _noiseAmplitude; }
-            set { _noiseAmplitude = value; }
+        public float distortionAmount {
+            get { return _distortionAmount; }
+            set { _distortionAmount = value; }
         }
 
-        // Depth fall-off
-        [SerializeField]
-        float _fallOffDepth = 40;
+        // Modulation mode
+        public enum ModulationMode {
+            None, Frac, Sin, Noise
+        }
 
-        public float fallOffDepth {
-            get { return _fallOffDepth; }
-            set { _fallOffDepth = value; }
+        [SerializeField]
+        ModulationMode _modulationMode = ModulationMode.None;
+
+        public ModulationMode modulationMode {
+            get { return _modulationMode; }
+            set { _modulationMode = value; }
+        }
+
+        // Modulation axis
+        [SerializeField]
+        Vector3 _modulationAxis = Vector3.forward;
+
+        public Vector3 modulationAxis {
+            get { return _modulationAxis; }
+            set { _modulationAxis = value; }
+        }
+
+        // Modulation frequency
+        [SerializeField]
+        float _modulationFrequency = 0.2f;
+
+        public float modulationFrequency {
+            get { return _modulationFrequency; }
+            set { _modulationFrequency = value; }
+        }
+
+        // Modulation speed
+        [SerializeField]
+        float _modulationSpeed = 1;
+
+        public float modulationSpeed {
+            get { return _modulationSpeed; }
+            set { _modulationSpeed = value; }
+        }
+
+        // Modulation exponent
+        [SerializeField, Range(1, 50)]
+        float _modulationExponent = 24;
+
+        public float modulationExponent {
+            get { return _modulationExponent; }
+            set { _modulationExponent = value; }
         }
 
         #endregion
@@ -121,6 +170,7 @@ namespace Kino
         Shader _shader;
 
         Material _material;
+        float _modulationTime;
 
         #endregion
 
@@ -129,6 +179,11 @@ namespace Kino
         void OnEnable()
         {
             GetComponent<Camera>().depthTextureMode |= DepthTextureMode.Depth;
+        }
+
+        void Update()
+        {
+            _modulationTime += Time.deltaTime * _modulationSpeed;
         }
 
         void OnRenderImage(RenderTexture source, RenderTexture destination)
@@ -142,22 +197,37 @@ namespace Kino
             _material.SetMatrix("_InverseView", matrix);
 
             _material.SetColor("_Color", _lineColor);
-            _material.SetColor("_BgColor", _backgroundColor);
+            _material.SetFloat("_FallOffDepth", _fallOffDepth);
             _material.SetFloat("_Blend", _luminanceBlending);
+            _material.SetColor("_BgColor", _backgroundColor);
 
             _material.SetVector("_Axis", _axis.normalized);
             _material.SetFloat("_Density", 1.0f / _interval);
             _material.SetVector("_Offset", _offset);
 
-            _material.SetFloat("_NoiseFreq", _noiseFrequency);
-            _material.SetFloat("_NoiseAmp", _noiseAmplitude);
+            _material.SetFloat("_DistFreq", _distortionFrequency);
+            _material.SetFloat("_DistAmp", _distortionAmount);
 
-            if (_noiseAmplitude > 0)
-                _material.EnableKeyword("NOISE_ON");
+            if (_distortionAmount > 0)
+                _material.EnableKeyword("DISTORTION");
             else
-                _material.DisableKeyword("NOISE_ON");
+                _material.DisableKeyword("DISTORTION");
 
-            _material.SetFloat("_FallOffDepth", _fallOffDepth);
+            _material.DisableKeyword("MODULATION_FRAC");
+            _material.DisableKeyword("MODULATION_SIN");
+            _material.DisableKeyword("MODULATION_NOISE");
+
+            if (_modulationMode == ModulationMode.Frac)
+                _material.EnableKeyword("MODULATION_FRAC");
+            else if (_modulationMode == ModulationMode.Sin)
+                _material.EnableKeyword("MODULATION_SIN");
+            else if (_modulationMode == ModulationMode.Noise)
+                _material.EnableKeyword("MODULATION_NOISE");
+
+            _material.SetVector("_ModAxis", _modulationAxis.normalized);
+            _material.SetFloat("_ModFreq", _modulationFrequency);
+            _material.SetFloat("_ModTime", _modulationTime);
+            _material.SetFloat("_ModExp", _modulationExponent);
 
             Graphics.Blit(source, destination, _material);
         }
