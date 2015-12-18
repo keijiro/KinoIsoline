@@ -135,7 +135,7 @@ Shader "Hidden/Kino/Isoline"
         // blending
         half4 cs = tex2D(_MainTex, i.uv);
         half3 cb = lerp(cs.rgb, _BgColor.rgb, _BgColor.a);
-        half3 cl = _Color.rgb * lerp(1, Luminance(cs), _Blend);
+        half3 cl = _Color.rgb * lerp(1, max(Luminance(cs), 0), _Blend);
         half3 co = lerp(cb, cl, saturate(g * falloff * _Color.a));
         return half4(co, cs.a);
     }
