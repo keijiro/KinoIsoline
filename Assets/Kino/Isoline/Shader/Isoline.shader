@@ -150,6 +150,7 @@ Shader "Hidden/Kino/Isoline"
             CGPROGRAM
             #pragma vertex vert_img
             #pragma fragment frag
+            #pragma target 3.0
             ENDCG
         }
     }
