@@ -38,7 +38,7 @@ Shader "Hidden/Kino/Isoline"
     #include "UnityCG.cginc"
 
     #if DISTORTION || MODULATION_NOISE
-    #include "ClassicNoise3D.cginc"
+    #include "SimplexNoise3D.cginc"
     #endif
 
     sampler2D _MainTex;
@@ -69,7 +69,7 @@ Shader "Hidden/Kino/Isoline"
     {
         wpos += _Offset;
         #if DISTORTION
-        wpos += cnoise(wpos * _DistFreq) * _DistAmp;
+        wpos += snoise(wpos * _DistFreq) * _DistAmp;
         #endif
         return dot(wpos, _Axis) * _Density;
     }
@@ -121,7 +121,7 @@ Shader "Hidden/Kino/Isoline"
 
         // line modulation
         #if MODULATION_NOISE
-        float mp = cnoise((wp0 - _ModAxis * _ModTime) * _ModFreq);
+        float mp = snoise((wp0 - _ModAxis * _ModTime) * _ModFreq);
         g *= pow(saturate(0.5 + mp), _ModExp);
         #elif MODULATION_FRAC || MODULATION_SIN
         float mp = (dot(wp0, _ModAxis) - _ModTime) * _ModFreq;
