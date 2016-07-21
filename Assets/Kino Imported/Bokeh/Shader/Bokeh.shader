@@ -1,4 +1,4 @@
-﻿//
+//
 // KinoBokeh - Fast DOF filter with hexagonal aperture
 //
 // Copyright (C) 2015 Keijiro Takahashi
