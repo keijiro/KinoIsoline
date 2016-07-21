@@ -1,4 +1,4 @@
-﻿//
+//
 // KinoIsoline - Isoline effect
 //
 // Copyright (C) 2015 Keijiro Takahashi
